@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/fragmentProgressSelection">
+    <fragment
+        android:id="@+id/fragmentProgressSelection"
+        android:name="com.Sanleone.progress.FragmentProgressSelection"
+        android:label="fragment_progress_selection"
+        tools:layout="@layout/fragment_progress_selection" />
+</navigation>
