@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="nightSky">#0A0B6E</color>
+    <color name="nightSkyDark">#0A0B4E</color>
+    <color name="daySun">#FFC107</color>
+    <color name="daySunDark">#83640B</color>
+    <color name="obsidian">#1E2328</color>
 </resources>

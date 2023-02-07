@@ -23,22 +23,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        try {
-            setSupportActionBar(binding.toolbar)
-        }
-        catch (e: Exception){
-            println("Error: " + e)
-        }
-//
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        appBarConfiguration = AppBarConfiguration(navController.graph)
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//
-//        //setContentView(R.layout.activity_main)
-//
-//        //to change title of activity
-//        val actionBar = supportActionBar
-//        actionBar!!.title = resources.getString(R.string.app_name)
+        setSupportActionBar(binding.toolbar)
+
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+        //setContentView(R.layout.activity_main)
+
+        //to change title of activity
+        val actionBar = supportActionBar
+        actionBar!!.title = resources.getString(R.string.app_name)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
