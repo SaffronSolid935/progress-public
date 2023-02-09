@@ -31,6 +31,10 @@ class FragmentProgressSelection : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.addProgressButton.setOnClickListener {
+
+        }
+
     }
 
     override fun onDestroyView() {
