@@ -5,6 +5,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 import kotlin.math.pow
+import kotlin.math.round
+import kotlin.math.roundToLong
 
 object ProgressLoader{
 
@@ -174,6 +176,40 @@ data class Progress(
 
     fun IsInteger(num: Any):Boolean{
         return num.toString().all { char -> char.isDigit() }
+    }
+
+    fun GetProgressFloat():Float{
+        var count: Int = 0
+        var value: Int = 0
+
+        tasks.forEach{
+            when(it.checkType){
+                CheckType.Int->{
+                    count += it.goal.toInt()
+                    value += it.value.toInt()
+                }
+                CheckType.Bool->{
+                    count += 1
+                    value += if (it.value == it.goal) 1 else 0
+                }
+            }
+        }
+
+        if (count == 0){
+            return 0f
+        }
+
+        val p = (value.toFloat() / count)
+
+        return Round(p.toDouble(),1).toFloat()
+    }
+
+    fun GetProgressInt():Int{
+        return GetProgressFloat().toInt()
+    }
+    fun Round(number: Double, decimalPlaces: Int): Double {
+        val factor = 10.0.pow(decimalPlaces.toDouble())
+        return kotlin.math.round(number * factor) / factor
     }
 
 }

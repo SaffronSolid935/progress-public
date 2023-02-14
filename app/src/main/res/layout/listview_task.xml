@@ -89,8 +89,7 @@
                 android:indeterminate="false"
                 android:progress="100"
                 android:progressTint="@color/lime"
-                android:progressBackgroundTint="@color/backgroundColor"
-                android:progressDrawable="@drawable/template_rectangle"/>
+                android:progressBackgroundTint="@color/backgroundColor"/>
 
 
         </FrameLayout>

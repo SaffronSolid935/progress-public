@@ -71,9 +71,9 @@
                 android:layout_margin="17dp"
                 android:indeterminate="false"
                 android:progress="100"
-                android:progressTint="@color/lime"
+                android:max="100"
                 android:progressBackgroundTint="@color/backgroundColor"
-                android:progressDrawable="@drawable/template_rectangle"/>
+                android:progressTint="@color/lime" />
 
 
         </FrameLayout>

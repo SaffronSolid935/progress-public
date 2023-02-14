@@ -69,16 +69,17 @@ class ProgressAdapter(context: Context, @LayoutRes private val layoutResource: I
             }
         }
 
-        val p = Round(value.toFloat() / count,1)
+        val p = (value.toFloat() / count).toInt()
+
         progressState.setText(p.toString() + "%")
         progressBar.progress = p.toInt()
 
         return retView
     }
 
-    fun Round(num: Float, decimals: Int):Float{
-        var integer: Int = (num * (10.0f).pow(decimals + 1)).toInt()
-        integer += 5
-        return integer.toFloat() / (10.0f).pow(decimals + 1)
-    }
+//    fun Round(num: Float, decimals: Int):Float{
+//        var integer: Int = (num * (10.0f).pow(decimals + 1)).toInt()
+//        integer += 5
+//        return integer.toFloat() / (10.0f).pow(decimals + 1)
+//    }
 }

@@ -8,5 +8,18 @@
         android:id="@+id/fragmentProgressSelection"
         android:name="com.Sanleone.progress.FragmentProgressSelection"
         android:label="fragment_progress_selection"
-        tools:layout="@layout/fragment_progress_selection" />
+        tools:layout="@layout/fragment_progress_selection" >
+        <action
+            android:id="@+id/action_fragmentProgressSelection_to_fragmentProgressTaskView"
+            app:destination="@id/fragmentProgressTaskView" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentProgressTaskView"
+        android:name="com.Sanleone.progress.FragmentProgressTaskView"
+        android:label="fragment_progress_task_view"
+        tools:layout="@layout/fragment_progress_task_view" >
+        <action
+            android:id="@+id/action_fragmentProgressTaskView_to_fragmentProgressSelection"
+            app:destination="@id/fragmentProgressSelection" />
+    </fragment>
 </navigation>
