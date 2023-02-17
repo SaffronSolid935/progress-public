@@ -53,7 +53,7 @@ class FragmentProgressSelection : Fragment() {
             Arguments.Clear()
             Arguments.AddArgument("open " + adapter.getItem(position)!!.id)
             findNavController().navigate(R.id.action_fragmentProgressSelection_to_fragmentProgressTaskView)
-            (activity as AppCompatActivity).supportActionBar?.title = adapter.getItem(position)!!.name
+            SetTitle(adapter.getItem(position)!!.name)
         }
     }
 

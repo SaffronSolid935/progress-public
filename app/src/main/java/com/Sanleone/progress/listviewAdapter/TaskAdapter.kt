@@ -13,14 +13,16 @@ import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import com.Sanleone.progress.FragmentProgressSelection
+import com.Sanleone.progress.FragmentProgressTaskView
 import com.Sanleone.progress.R
 import com.Sanleone.progress.dataHandler.CheckType
 import com.Sanleone.progress.dataHandler.Progress
+import com.Sanleone.progress.dataHandler.Task
 import com.Sanleone.progress.debug.Debug
 import kotlin.math.pow
 
-class ProgressAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val content: List<Progress>, val fragment: FragmentProgressSelection):
-    ArrayAdapter<Progress>(context, layoutResource, content) {
+class TaskAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val content: List<Task>, val fragment: FragmentProgressTaskView):
+    ArrayAdapter<Task>(context, layoutResource, content) {
 
     var currentIndex: Int = 0
 
@@ -45,34 +47,18 @@ class ProgressAdapter(context: Context, @LayoutRes private val layoutResource: I
             retView = convertView
         }
 
-        val progressName: TextView = retView.findViewById<TextView>(R.id.progressNameView)
-        val progressState: TextView = retView.findViewById<TextView>(R.id.progressSateView)
-        val progressBar: ProgressBar = retView.findViewById<ProgressBar>(R.id.progressBarView)
+        val taskName: TextView = retView.findViewById<TextView>(R.id.taskNameView)
+        val taskStateAbsolute: TextView = retView.findViewById<TextView>(R.id.taskAbsoluteSateView)
+        val taskStateRelative: TextView = retView.findViewById<TextView>(R.id.taskStateView)
+        val taskBar: ProgressBar = retView.findViewById<ProgressBar>(R.id.taskBarView)
 
-        val progress = getItem(position)!!
+        val taskProgress = getItem(position)!!
 
-        progressName.setText(progress.name)
+        taskName.setText(taskProgress.shortDescription)
 
-        var count: Int = 0
-        var value: Int = 0
-
-        progress.tasks.forEach{
-            when(it.checkType){
-                CheckType.Int->{
-                    count += it.goal.toInt()
-                    value += it.value.toInt()
-                }
-                CheckType.Bool->{
-                    count += 1
-                    value += if (it.value == it.goal) 1 else 0
-                }
-            }
-        }
-
-        val p = (value.toFloat() / count).toInt() *100
-
-        progressState.setText(p.toString() + "%")
-        progressBar.progress = p.toInt()
+        taskStateAbsolute.setText(taskProgress.value + "/" + taskProgress.goal)
+        taskStateRelative.setText(taskProgress.GetProgress().toInt().toString() + "%" )
+        taskBar.progress = taskProgress.GetProgress().toInt()
 
         return retView
     }

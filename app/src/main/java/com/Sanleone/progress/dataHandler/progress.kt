@@ -41,16 +41,16 @@ data class Progress(
     var tasks: MutableList<Task>
 ){
 
-    fun AddTask(shortDescription: String,longDescription: String, checkType: CheckType, value: String, goal: Any):TaskStatus{
+    fun AddTask(shortDescription: String, longDescription: String, checkType: CheckType, value: String, goal: Any):TaskStatus{
         val taskStatus: TaskStatus = TaskStatus()
 
         try {
-            if (shortDescription == "" || shortDescription == "null") {
-                taskStatus.status = TaskStatusCode.NoShortDescription
-                taskStatus.description =
-                    "Do not set the variable shortDescription to \"\" or \"null\"."
-                return taskStatus
-            }
+//            if (shortDescription == "" || shortDescription == "null") {
+//                taskStatus.status = TaskStatusCode.NoShortDescription
+//                taskStatus.description =
+//                    "Do not set the variable shortDescription to \"\" or \"null\"."
+//                return taskStatus
+//            }
 
             when (checkType) {
                 CheckType.Bool -> {
@@ -201,7 +201,7 @@ data class Progress(
 
         val p = (value.toFloat() / count)
 
-        return Round(p.toDouble(),1).toFloat()
+        return Round(p.toDouble(),3).toFloat() * 100
     }
 
     fun GetProgressInt():Int{
@@ -246,22 +246,18 @@ data class Task(
     fun GetProgress():Float{
         when (checkType){
             CheckType.Bool->{
-                return if ((value != "false") == (goal != "false")) 1f else 0f
+                return if ((value != "false") == (goal != "false")) 100f else 0f
             }
             CheckType.Int->{
-                return Round(value.toFloat() / goal.toFloat(),1)
+                return Round(value.toDouble() / goal.toFloat(),3).toFloat() * 100
             }
         }
         return 0f
     }
 
-    fun Round(num: Float, decimalPlaces: Int):Float{
-        var integerWithDecimalPlaces: Int = (num * (10.0).pow(decimalPlaces)).toInt()
-        if ((num * (10.0).pow(decimalPlaces + 1)).toInt() - integerWithDecimalPlaces * 10 >= 5){
-            integerWithDecimalPlaces /= 10
-            integerWithDecimalPlaces += 1
-        }
-        return (integerWithDecimalPlaces.toFloat() / (10.0).pow(decimalPlaces)).toFloat()
+    fun Round(number: Double, decimalPlaces: Int): Double {
+        val factor = 10.0.pow(decimalPlaces.toDouble())
+        return kotlin.math.round(number * factor) / factor
     }
 }
 

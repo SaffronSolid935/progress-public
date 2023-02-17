@@ -1,15 +1,28 @@
 package com.Sanleone.progress
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import androidx.navigation.fragment.findNavController
 import com.Sanleone.progress.arguments.Arguments
+import com.Sanleone.progress.dataHandler.CheckType
+import com.Sanleone.progress.dataHandler.Files
 import com.Sanleone.progress.dataHandler.Progress
 import com.Sanleone.progress.dataHandler.ProgressLoader
 import com.Sanleone.progress.databinding.FragmentProgressTaskViewBinding
+import com.Sanleone.progress.listviewAdapter.TaskAdapter
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import kotlin.reflect.typeOf
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -42,6 +55,8 @@ class FragmentProgressTaskView : Fragment() {
         val progressTextState = binding.progressTextState
         val progressBarView = binding.progressBarView
         val args = Arguments.GetAllArguments()
+
+        println("ARGS: " + args)
 
         args.forEach {
             val argumentParts = it.split(" ")
@@ -81,11 +96,10 @@ class FragmentProgressTaskView : Fragment() {
                     for (i in 0 until progressList.size){
                         if (progressList[i] .id == id){
                             progress = progressList[i]
-                            (activity as AppCompatActivity).supportActionBar?.title = progress.name
                             progressIndex = i
 
                             progressNameInput.setText(progress.name)
-                            progressTextState.setText(progress.GetProgressFloat().toString() + "%")
+                            progressTextState.setText(progress.GetProgressInt().toString() + "%")
                             progressBarView.progress = progress.GetProgressInt()
 
                             break
@@ -102,6 +116,89 @@ class FragmentProgressTaskView : Fragment() {
 //            }
         }
 
+
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        println("JSON: " + gson.toJson(progress))
+        SetTitle(progress.name)
+        Arguments.Clear()
+
+        progressNameInput.addTextChangedListener {
+            UpdateProgressName()
+        }
+
+        binding.addTaskButton.setOnClickListener {
+            Arguments.Clear()
+            Arguments.AddArgument("create " + progressIndex)
+            findNavController().navigate(R.id.action_fragmentProgressTaskView_to_fragmentTaskDetailsAndProperties)
+        }
+
+
+
+        val adapter = TaskAdapter(context!!,R.layout.listview_task,progress.tasks,this)
+
+        binding.taskListView.isClickable = true
+        binding.taskListView.adapter = adapter
+        binding.taskListView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            // Kurzer Klick
+            Log.d("TAG", "Kurzer Klick auf Element $position")
+
+            val task = progress.tasks[position]
+
+            when (task.checkType){
+                CheckType.Bool->{
+                    task.value = (task.value == "false").toString()
+                }
+                CheckType.Int->{
+                    task.value = ((task.value.toInt() + 1) % (task.goal.toInt()+1)).toString()
+                }
+            }
+
+            val progressBar = view.findViewById<ProgressBar>(R.id.taskBarView)
+            val relativeState = view.findViewById<TextView>(R.id.taskStateView)
+            val absoluteState = view.findViewById<TextView>(R.id.taskAbsoluteSateView)
+
+            println(task.value + "/" + task.goal + "=" + task.GetProgress().toInt() + "->" + task.GetProgress().toInt()::class.simpleName + "\n" + (progressBar == null))
+            progressBar.progress = task.GetProgress().toInt()
+            relativeState.text = task.GetProgress().toInt().toString() + "%"
+            absoluteState.text = task.value + "/" + task.goal
+
+            binding.progressBarView.progress = progress.GetProgressInt()
+            binding.progressTextState.text = progress.GetProgressInt().toString() + "%"
+
+            progress.tasks[position] = task
+
+            val progressList = ProgressLoader.LoadProgess(context!!)
+            progressList[progressIndex] = progress
+
+            ProgressLoader.SaveProgress(progressList,context!!)
+
+        }
+
+        binding.taskListView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, position, id ->
+            // Langer Klick
+            Log.d("TAG", "Langer Klick auf Element $position")
+
+            Arguments.Clear()
+            Arguments.AddArgument("open " + progressIndex + " " + position)
+//
+            findNavController().navigate(R.id.action_fragmentProgressTaskView_to_fragmentTaskDetailsAndProperties)
+
+            // true zurückgeben, um zu signalisieren, dass das Ereignis verarbeitet wurde
+            true
+        }
+
+    }
+
+    fun UpdateProgressName(){
+        progress.name = binding.progressNameInput.text.toString()
+        SetTitle(progress.name)
+        val progressList = ProgressLoader.LoadProgess(context!!)
+        progressList[progressIndex] = progress
+        ProgressLoader.SaveProgress(progressList,context!!)
+    }
+
+    fun SetTitle(newTitle: String){
+        (activity as AppCompatActivity).supportActionBar?.title = newTitle
     }
 
     override fun onDestroyView() {

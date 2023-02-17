@@ -79,6 +79,7 @@
 <!--            android:progress="50"/>-->
 
         <ListView
+            android:id="@+id/taskListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -92,7 +93,7 @@
 
 
     <ImageButton
-        android:id="@+id/addProgressButton"
+        android:id="@+id/addTaskButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleX="2.5"

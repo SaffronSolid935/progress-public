@@ -21,5 +21,17 @@
         <action
             android:id="@+id/action_fragmentProgressTaskView_to_fragmentProgressSelection"
             app:destination="@id/fragmentProgressSelection" />
+        <action
+            android:id="@+id/action_fragmentProgressTaskView_to_fragmentTaskDetailsAndProperties"
+            app:destination="@id/fragmentTaskDetailsAndProperties" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentTaskDetailsAndProperties"
+        android:name="com.Sanleone.progress.FragmentTaskDetailsAndProperties"
+        android:label="fragment_task_details_and_properties"
+        tools:layout="@layout/fragment_task_details_and_properties" >
+        <action
+            android:id="@+id/action_fragmentTaskDetailsAndProperties_to_fragmentProgressTaskView"
+            app:destination="@id/fragmentProgressTaskView" />
     </fragment>
 </navigation>
