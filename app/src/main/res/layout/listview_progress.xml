@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:theme="@style/Theme.Progress">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="150"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="100"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/progressNameView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Progress-Name"
+                android:textSize="17dp"
+                android:layout_marginLeft="10dp"
+                android:textStyle="bold"
+                android:textAlignment="center"/>
+            <TextView
+                android:id="@+id/progressSateView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100%"
+                android:layout_marginLeft="10dp"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_weight="40"/>-->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="50">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="@color/foregroundColor"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                android:background="@color/backgroundColor"/>
+<!--            <View-->
+<!--                android:id="@+id/progressBarView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_margin="17dp"-->
+<!--                android:background="@color/lime"/>-->
+
+            <ProgressBar
+                android:id="@+id/progressBarView"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="17dp"
+                android:indeterminate="false"
+                android:progress="100"
+                android:max="100"
+                android:progressBackgroundTint="@color/backgroundColor"
+                android:progressTint="@color/lime" />
+
+
+        </FrameLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/fragmentProgressSelection">
+    <fragment
+        android:id="@+id/fragmentProgressSelection"
+        android:name="com.Sanleone.progress.FragmentProgressSelection"
+        android:label="fragment_progress_selection"
+        tools:layout="@layout/fragment_progress_selection" >
+        <action
+            android:id="@+id/action_fragmentProgressSelection_to_fragmentProgressTaskView"
+            app:destination="@id/fragmentProgressTaskView" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentProgressTaskView"
+        android:name="com.Sanleone.progress.FragmentProgressTaskView"
+        android:label="fragment_progress_task_view"
+        tools:layout="@layout/fragment_progress_task_view" >
+        <action
+            android:id="@+id/action_fragmentProgressTaskView_to_fragmentProgressSelection"
+            app:destination="@id/fragmentProgressSelection" />
+        <action
+            android:id="@+id/action_fragmentProgressTaskView_to_fragmentTaskDetailsAndProperties"
+            app:destination="@id/fragmentTaskDetailsAndProperties" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentTaskDetailsAndProperties"
+        android:name="com.Sanleone.progress.FragmentTaskDetailsAndProperties"
+        android:label="fragment_task_details_and_properties"
+        tools:layout="@layout/fragment_task_details_and_properties" >
+        <action
+            android:id="@+id/action_fragmentTaskDetailsAndProperties_to_fragmentProgressTaskView"
+            app:destination="@id/fragmentProgressTaskView" />
+    </fragment>
+</navigation>
