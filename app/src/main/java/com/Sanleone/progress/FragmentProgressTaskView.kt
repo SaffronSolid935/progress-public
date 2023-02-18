@@ -2,27 +2,21 @@ package com.Sanleone.progress
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.Sanleone.progress.arguments.Arguments
 import com.Sanleone.progress.dataHandler.CheckType
-import com.Sanleone.progress.dataHandler.Files
 import com.Sanleone.progress.dataHandler.Progress
 import com.Sanleone.progress.dataHandler.ProgressLoader
 import com.Sanleone.progress.databinding.FragmentProgressTaskViewBinding
 import com.Sanleone.progress.listviewAdapter.TaskAdapter
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import kotlin.reflect.typeOf
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -44,6 +38,9 @@ class FragmentProgressTaskView : Fragment() {
     ): View? {
 
         _binding = FragmentProgressTaskViewBinding.inflate(inflater, container, false)
+
+        setHasOptionsMenu(true)
+
         return binding.root
 
     }
@@ -100,7 +97,6 @@ class FragmentProgressTaskView : Fragment() {
 
                             progressNameInput.setText(progress.name)
                             progressTextState.setText(progress.GetProgressInt().toString() + "%")
-                            progressBarView.progress = progress.GetProgressInt()
 
                             break
                         }
@@ -115,6 +111,8 @@ class FragmentProgressTaskView : Fragment() {
 //                }
 //            }
         }
+        progressBarView.progress = progress.GetProgressInt()
+        println("progress bar: " + progress.GetProgressInt().toString() + ":" + progressBarView.progress.toString())
 
 
         val gson = GsonBuilder().setPrettyPrinting().create()
@@ -199,6 +197,41 @@ class FragmentProgressTaskView : Fragment() {
 
     fun SetTitle(newTitle: String){
         (activity as AppCompatActivity).supportActionBar?.title = newTitle
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        println("onOptionsCreated")
+        inflater.inflate(R.menu.menu_main, menu)
+        menu.getItem(0).setOnMenuItemClickListener {
+            println("onOptionsItemSelected")
+
+            val progressList = ProgressLoader.LoadProgess(context!!)
+
+            progressList.removeAt(progressIndex)
+
+            ProgressLoader.SaveProgress(progressList,context!!)
+
+            findNavController().popBackStack()
+            SetTitle(getString(R.string.app_name))
+            true
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        println("onOptionsItemSelected")
+        when (item.itemId) {
+            R.id.action_delete -> {
+                // Handle delete item click here
+                findNavController().navigate(R.id.action_fragmentProgressTaskView_to_fragmentProgressSelection)
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        // Fortschrittsbalken aktualisieren
+        binding.progressBarView.progress = progress.GetProgressInt()
     }
 
     override fun onDestroyView() {

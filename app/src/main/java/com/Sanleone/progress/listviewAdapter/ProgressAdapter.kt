@@ -71,8 +71,8 @@ class ProgressAdapter(context: Context, @LayoutRes private val layoutResource: I
 
         val p = (value.toFloat() / count).toInt() *100
 
-        progressState.setText(p.toString() + "%")
-        progressBar.progress = p.toInt()
+        progressState.setText(progress.GetProgressInt().toString() + "%")
+        progressBar.progress = progress.GetProgressInt()
 
         return retView
     }

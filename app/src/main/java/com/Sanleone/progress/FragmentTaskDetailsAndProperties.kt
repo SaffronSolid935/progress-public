@@ -2,11 +2,8 @@ package com.Sanleone.progress
 
 import android.content.Context
 import android.os.Bundle
-import android.view.KeyEvent
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -14,6 +11,7 @@ import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
+import androidx.navigation.fragment.findNavController
 import com.Sanleone.progress.arguments.Arguments
 import com.Sanleone.progress.dataHandler.CheckType
 import com.Sanleone.progress.dataHandler.Progress
@@ -45,6 +43,9 @@ class FragmentTaskDetailsAndProperties : Fragment() {
     ): View? {
 
         _binding = FragmentTaskDetailsAndPropertiesBinding.inflate(inflater, container, false)
+
+        setHasOptionsMenu(true)
+
         return binding.root
 
     }
@@ -176,6 +177,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
                     task.goal = "2"
                     binding.goalNumber.setText(task.goal)
                 }
+                SaveTask()
                 true
             } else {
                 false
@@ -187,6 +189,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
                 task.goal = "2"
                 binding.goalNumber.setText(task.goal)
             }
+            SaveTask()
         }
 
         binding.goalNumber.addTextChangedListener {
@@ -211,6 +214,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
                     task.goal = "2"
                     binding.goalNumber.setText(task.goal)
                 }
+                SaveTask()
                 true
             }
             else {
@@ -314,9 +318,34 @@ class FragmentTaskDetailsAndProperties : Fragment() {
 //            binding.goalNumber.setText(task.goal)
 //        }
 //    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        println("onOptionsCreated")
+        inflater.inflate(R.menu.menu_main, menu)
+        menu.getItem(0).setOnMenuItemClickListener {
+            println("onOptionsItemSelected")
+
+            val progressList = ProgressLoader.LoadProgess(context!!)
+
+            progressList[progressIndex].tasks.removeAt(taskIndex)
+
+            ProgressLoader.SaveProgress(progressList,context!!)
+
+            findNavController().popBackStack()
+            SetTitle(progress.name)
+            true
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
     override fun onPause() {
         super.onPause()
+        if (task.checkType == CheckType.Int) {
+            if (task.goal.toInt() <= 1) {
+                task.goal = "2"
+                binding.goalNumber.setText(task.goal)
+            }
+            SaveTask()
+        }
         Arguments.Clear()
         Arguments.AddArgument("open " + progressIndex.toString())
     }

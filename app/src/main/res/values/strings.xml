@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Progress</string>
     <string name="action_settings">Settings</string>
+    <string name="delete">Delete</string>
 
     <string-array name="checkType">
         <item>Done/Not Done</item>
