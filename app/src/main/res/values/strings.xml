@@ -3,6 +3,9 @@
     <string name="action_settings">Settings</string>
     <string name="delete">Delete</string>
 
+    <string name="defaultProgressName">Unnamed Progress</string>
+    <string name="defaultTaskName">Unnamed Task</string>
+
     <string-array name="checkType">
         <item>Done/Not Done</item>
         <item>Number</item>

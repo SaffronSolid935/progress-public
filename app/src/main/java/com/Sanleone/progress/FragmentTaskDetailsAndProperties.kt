@@ -36,6 +36,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
     var taskIndex: Int = 0
     var valueChanged: Boolean = false
     var goalChanged: Boolean = false
+    var deleteNameOnEdit: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +55,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val args = Arguments.GetAllArguments()
+        var create: Boolean = false
 
         println("ARGS: " + args)
 
@@ -69,8 +71,9 @@ class FragmentTaskDetailsAndProperties : Fragment() {
 
                     println(progress.tasks.size)
                     taskIndex = progress.tasks.size
-                    progress.tasks.add(Task("Unnamed-Task", "", CheckType.Bool, "false", "true"))
+                    progress.tasks.add(Task(getString(R.string.defaultTaskName), "", CheckType.Bool, "false", "true"))
                     task = progress.tasks[taskIndex]
+                    create = true
                 }
                 "open"->{
                     progressIndex = argumentParts[1].toInt()
@@ -84,6 +87,12 @@ class FragmentTaskDetailsAndProperties : Fragment() {
         }
 
         binding.taskNameView.addTextChangedListener {
+            println("DefaultTaskName use: " + (binding.taskNameView.text.toString() == getString(R.string.defaultTaskName).substring(0, getString(R.string.defaultTaskName).length - 1)))
+            if (deleteNameOnEdit/*binding.taskNameView.text.toString() == getString(R.string.defaultTaskName).substring(0, getString(R.string.defaultTaskName).length - 1)*/){
+                deleteNameOnEdit = false
+                binding.taskNameView.setText("")
+                SetTitle("")
+            }
             task.shortDescription = it.toString()
             SetTitle(task.shortDescription)
             //UpdateView()
@@ -225,6 +234,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
         Arguments.Clear()
 
         UpdateView()
+        deleteNameOnEdit = create
         SaveTask()
 
 

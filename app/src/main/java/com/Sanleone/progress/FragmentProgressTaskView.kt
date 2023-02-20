@@ -31,6 +31,7 @@ class FragmentProgressTaskView : Fragment() {
 
     lateinit var progress: Progress
     var progressIndex: Int = 0
+    var deleteNameOnEdit: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +62,7 @@ class FragmentProgressTaskView : Fragment() {
             when (argumentParts[0]){
                 "create"->{
 
-                    progressNameInput.setText("Unnamed progress")
+                    progressNameInput.setText(getString(R.string.defaultProgressName))
                     progressTextState.setText("0%")
                     progressBarView.progress = 0
 //                    progressBarView.max = 100
@@ -85,6 +86,7 @@ class FragmentProgressTaskView : Fragment() {
                     progressIndex = progressList.size - 1
 
                     ProgressLoader.SaveProgress(progressList,context!!)
+                    deleteNameOnEdit = true
                 }
                 "open"->{
                     val id: Int = argumentParts[1].toInt()
@@ -121,6 +123,10 @@ class FragmentProgressTaskView : Fragment() {
         Arguments.Clear()
 
         progressNameInput.addTextChangedListener {
+            if (deleteNameOnEdit){//.text.toString() == getString(R.string.defaultProgressName).substring(0, getString(R.string.defaultProgressName).length - 1)){
+                deleteNameOnEdit = false
+                progressNameInput.setText("")
+            }
             UpdateProgressName()
         }
 
