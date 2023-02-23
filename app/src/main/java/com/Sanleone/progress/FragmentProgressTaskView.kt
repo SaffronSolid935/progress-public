@@ -87,6 +87,7 @@ class FragmentProgressTaskView : Fragment() {
 
                     ProgressLoader.SaveProgress(progressList,context!!)
                     deleteNameOnEdit = true
+
                 }
                 "open"->{
                     val id: Int = argumentParts[1].toInt()
@@ -113,6 +114,25 @@ class FragmentProgressTaskView : Fragment() {
 //                }
 //            }
         }
+        Arguments.Clear()
+        Arguments.AddArgument("open " + progress.id.toString())
+        println("Progress=Null:" + (this::progress.isInitialized))
+//        if (!this::progress.isInitialized){
+//            val id: Int = argumentParts[1].toInt()
+//
+//            val progressList = ProgressLoader.LoadProgess(context!!)
+//            for (i in 0 until progressList.size){
+//                if (progressList[i] .id == id){
+//                    progress = progressList[i]
+//                    progressIndex = i
+//
+//                    progressNameInput.setText(progress.name)
+//                    progressTextState.setText(progress.GetProgressInt().toString() + "%")
+//
+//                    break
+//                }
+//            }
+//        }
         progressBarView.progress = progress.GetProgressInt()
         println("progress bar: " + progress.GetProgressInt().toString() + ":" + progressBarView.progress.toString())
 
@@ -120,7 +140,7 @@ class FragmentProgressTaskView : Fragment() {
         val gson = GsonBuilder().setPrettyPrinting().create()
         println("JSON: " + gson.toJson(progress))
         SetTitle(progress.name)
-        Arguments.Clear()
+        //Arguments.Clear()
 
         progressNameInput.addTextChangedListener {
             if (deleteNameOnEdit){//.text.toString() == getString(R.string.defaultProgressName).substring(0, getString(R.string.defaultProgressName).length - 1)){

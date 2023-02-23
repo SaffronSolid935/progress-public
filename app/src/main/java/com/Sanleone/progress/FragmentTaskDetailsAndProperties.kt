@@ -85,6 +85,9 @@ class FragmentTaskDetailsAndProperties : Fragment() {
                 }
             }
         }
+        println("Args: " + Arguments.GetAllArguments())
+        Arguments.Clear()
+        Arguments.AddArgument("open " + progressIndex + " " + taskIndex)
 
         binding.taskNameView.addTextChangedListener {
             println("DefaultTaskName use: " + (binding.taskNameView.text.toString() == getString(R.string.defaultTaskName).substring(0, getString(R.string.defaultTaskName).length - 1)))
@@ -231,7 +234,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
             }
         }
 
-        Arguments.Clear()
+        //Arguments.Clear()
 
         UpdateView()
         deleteNameOnEdit = create
@@ -357,7 +360,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
             SaveTask()
         }
         Arguments.Clear()
-        Arguments.AddArgument("open " + progressIndex.toString())
+        Arguments.AddArgument("open " + progressIndex.toString() + " " + taskIndex.toString())
     }
 
     override fun onDestroyView() {
