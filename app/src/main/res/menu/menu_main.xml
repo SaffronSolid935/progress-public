@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.Sanleone.progress.MainActivity">
     <item
+        android:id="@+id/action_copy"
+        android:title="Copy"
+        android:actionLayout="@layout/template_delete_button"/>
+    <item
         android:id="@+id/action_delete"
         android:title="Delete"
         android:actionLayout="@layout/template_delete_button"/>
-<!--    <item-->
-<!--        android:id="@+id/action_delete"-->
-<!--        android:title="Delete"-->
-<!--        app:showAsAction="ifRoom"-->
-<!--        android:actionLayout="@layout/template_delete_button"/>-->
 </menu>

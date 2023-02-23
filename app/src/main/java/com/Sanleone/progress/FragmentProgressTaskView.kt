@@ -96,6 +96,7 @@ class FragmentProgressTaskView : Fragment() {
                     for (i in 0 until progressList.size){
                         if (progressList[i] .id == id){
                             progress = progressList[i]
+                            println("Open: " + progress.name)
                             progressIndex = i
 
                             progressNameInput.setText(progress.name)
@@ -104,6 +105,7 @@ class FragmentProgressTaskView : Fragment() {
                             break
                         }
                     }
+                    deleteNameOnEdit = false
                 }
             }
 //            if (argumentParts.size == 1){
@@ -137,12 +139,13 @@ class FragmentProgressTaskView : Fragment() {
         println("progress bar: " + progress.GetProgressInt().toString() + ":" + progressBarView.progress.toString())
 
 
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        println("JSON: " + gson.toJson(progress))
+        //val gson = GsonBuilder().setPrettyPrinting().create()
+        //println("JSON: " + gson.toJson(progress))
         SetTitle(progress.name)
         //Arguments.Clear()
 
         progressNameInput.addTextChangedListener {
+            //println("Delete Name: " + deleteNameOnEdit)
             if (deleteNameOnEdit){//.text.toString() == getString(R.string.defaultProgressName).substring(0, getString(R.string.defaultProgressName).length - 1)){
                 deleteNameOnEdit = false
                 progressNameInput.setText("")
@@ -153,6 +156,7 @@ class FragmentProgressTaskView : Fragment() {
         binding.addTaskButton.setOnClickListener {
             Arguments.Clear()
             Arguments.AddArgument("create " + progressIndex)
+            deleteNameOnEdit = false
             findNavController().navigate(R.id.action_fragmentProgressTaskView_to_fragmentTaskDetailsAndProperties)
         }
 
@@ -205,6 +209,8 @@ class FragmentProgressTaskView : Fragment() {
             Arguments.Clear()
             Arguments.AddArgument("open " + progressIndex + " " + position)
 //
+            deleteNameOnEdit = false
+            //println("Delete Name Test: " + deleteNameOnEdit)
             findNavController().navigate(R.id.action_fragmentProgressTaskView_to_fragmentTaskDetailsAndProperties)
 
             // true zurückgeben, um zu signalisieren, dass das Ereignis verarbeitet wurde
@@ -228,7 +234,7 @@ class FragmentProgressTaskView : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         println("onOptionsCreated")
         inflater.inflate(R.menu.menu_main, menu)
-        menu.getItem(0).setOnMenuItemClickListener {
+        GetMenuItemById(menu,R.id.action_delete)?.setOnMenuItemClickListener {
             println("onOptionsItemSelected")
 
             val progressList = ProgressLoader.LoadProgess(context!!)
@@ -241,7 +247,71 @@ class FragmentProgressTaskView : Fragment() {
             SetTitle(getString(R.string.app_name))
             true
         }
+
+        GetMenuItemById(menu, R.id.action_copy)?.setOnMenuItemClickListener {
+            CopyProgress()
+            true
+        }
+
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    fun CopyProgress(){
+        val newProgress = progress.Copy(context)
+
+        val splittedName = progress.name.split(" ")
+        val lastPartOfName = splittedName[splittedName.size - 1]
+        var newName = ""
+        if (IsInt(lastPartOfName)){
+            for (i in 0 until splittedName.size- 1){
+                newName += splittedName[i] + " "
+            }
+
+            newName += lastPartOfName.toInt() + 1
+        }
+        else{
+            for (i in 0 until splittedName.size){
+                newName += splittedName[i] + " "
+            }
+
+            newName += "2"
+        }
+
+        newProgress.name = newName
+        progress = newProgress
+        val progressList = ProgressLoader.LoadProgess(context!!)
+        progressIndex = progressList.size
+        progressList.add(progress)
+
+        ProgressLoader.SaveProgress(progressList,context!!)
+
+        SetTitle(newProgress.name)
+
+        binding.progressNameInput.setText(newProgress.name)
+
+
+        Arguments.Clear()
+        Arguments.AddArgument("open " + progressIndex)
+    }
+
+    fun IsInt(num: Any):Boolean{
+        try{
+            num.toString().toInt()
+            return true
+        }
+        catch (e: java.lang.Exception){
+            return false
+        }
+    }
+
+    fun GetMenuItemById(menu: Menu, id: Int):MenuItem?{
+        for (i in 0 until menu.size()){
+            val item = menu.getItem(i)
+            if (item.itemId == id){
+                return item
+            }
+        }
+        return null
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         println("onOptionsItemSelected")

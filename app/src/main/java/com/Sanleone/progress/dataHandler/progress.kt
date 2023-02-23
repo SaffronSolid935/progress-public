@@ -212,6 +212,25 @@ data class Progress(
         return kotlin.math.round(number * factor) / factor
     }
 
+    fun Copy(context: Context?):Progress{
+        val tasks: MutableList<Task> = mutableListOf()
+        this.tasks.forEach {
+            tasks.add(it.Copy())
+        }
+        var newId = 0
+
+        val progressList = ProgressLoader.LoadProgess(context!!)
+
+        progressList.forEach {
+            if (it.id >= newId){
+                newId = it.id + 1
+            }
+        }
+
+        val newProgress = Progress(newId,name,tasks)
+        return newProgress
+    }
+
 }
 
 sealed class TaskValue{
@@ -258,6 +277,31 @@ data class Task(
     fun Round(number: Double, decimalPlaces: Int): Double {
         val factor = 10.0.pow(decimalPlaces.toDouble())
         return kotlin.math.round(number * factor) / factor
+    }
+    fun Copy():Task{
+        val newTask = Task(shortDescription,longDescription,checkType,value,goal)
+
+//        val splittedName = task.shortDescription.split(" ")
+//        val lastPartOfName = splittedName[splittedName.size - 1]
+//        var newName = ""
+//        if (IsInt(lastPartOfName)){
+//            for (i in 0 until splittedName.size- 1){
+//                newName += splittedName[i] + " "
+//            }
+//
+//            newName += lastPartOfName.toInt() + 1
+//        }
+//        else{
+//            for (i in 0 until splittedName.size){
+//                newName += splittedName[i] + " "
+//            }
+//
+//            newName += "2"
+//        }
+//
+//        newTask.shortDescription = newName
+
+        return newTask
     }
 }
 

@@ -1,15 +1,12 @@
 package com.Sanleone.progress
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import com.Sanleone.progress.arguments.Arguments
@@ -322,7 +319,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.title = newTitle
     }
 
-//    override fun onBackPressed() {
+    //    override fun onBackPressed() {
 //
 //        // Führe den Code aus, den du ausführen möchtest, wenn der Benutzer die Tastatur schließt.
 //        // Zum Beispiel:
@@ -334,20 +331,92 @@ class FragmentTaskDetailsAndProperties : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         println("onOptionsCreated")
         inflater.inflate(R.menu.menu_main, menu)
-        menu.getItem(0).setOnMenuItemClickListener {
+        val copyItem = GetMenuItemById(menu, R.id.action_copy)
+
+        GetMenuItemById(menu, R.id.action_delete)?.setOnMenuItemClickListener {
             println("onOptionsItemSelected")
 
             val progressList = ProgressLoader.LoadProgess(context!!)
 
             progressList[progressIndex].tasks.removeAt(taskIndex)
 
-            ProgressLoader.SaveProgress(progressList,context!!)
+            ProgressLoader.SaveProgress(progressList, context!!)
 
             findNavController().popBackStack()
             SetTitle(progress.name)
             true
         }
+
+        GetMenuItemById(menu, R.id.action_copy)?.setOnMenuItemClickListener {
+            CopyTask()
+            true
+        }
+
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    fun GetMenuItemById(menu: Menu, id: Int):MenuItem?{
+        for (i in 0 until menu.size()){
+            val item = menu.getItem(i)
+            if (item.itemId == id){
+                return item
+            }
+        }
+        return null
+    }
+
+    fun CopyTask(){
+        val newTask = CopyTaskProperties(task)
+
+        taskIndex = progress.tasks.size
+        progress.tasks.add(newTask)
+        task = newTask
+
+        deleteNameOnEdit = false
+
+        SetTitle(task.shortDescription)
+        binding.taskNameView.setText(task.shortDescription)
+
+        SaveTask()
+        Arguments.Clear()
+        Arguments.AddArgument("open " + progressIndex + " " + taskIndex)
+
+    }
+
+    fun CopyTaskProperties(task: Task):Task{
+        val newTask = task.Copy()
+
+        val splittedName = task.shortDescription.split(" ")
+        val lastPartOfName = splittedName[splittedName.size - 1]
+        var newName = ""
+        if (IsInt(lastPartOfName)){
+            for (i in 0 until splittedName.size- 1){
+                newName += splittedName[i] + " "
+            }
+
+            newName += lastPartOfName.toInt() + 1
+        }
+        else{
+            for (i in 0 until splittedName.size){
+                newName += splittedName[i] + " "
+            }
+
+            newName += "2"
+        }
+
+        newTask.shortDescription = newName
+
+        return newTask
+    }
+
+    fun IsInt(num: Any):Boolean{
+        try{
+            num.toString().toInt()
+            return true
+        }
+        catch (e: java.lang.Exception){
+            return false
+        }
     }
 
     override fun onPause() {
