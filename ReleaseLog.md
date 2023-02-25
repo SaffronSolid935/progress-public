@@ -1,0 +1,15 @@
+# Release Log
+
+- **V 1.2.2**
+	- Release log feature added.
+
+- **V 1.2.1**
+	- A new confirmation dialog has been added for deletion.
+- **V 1.2.0**
+	- Now you can easily duplicate objects.
+- **V 1.1.1 (Bug-Fix)**
+	- Previously, the app would crash when changing the theme, but with version 1.1.1, this issue has been resolved.
+- **V 1.1.0**
+	- The default progress name and default task name will be automatically deleted when editing starts.\n\n\n
+- **V 1.0.1 (Bug-Fix):\n\n**
+	- Text edit of the progress name is now completely visible in the edit mode.

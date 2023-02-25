@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.Sanleone.progress.dataHandler.ReleaseLogHandler
 import com.Sanleone.progress.databinding.ActivityMainBinding
 
 
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         //to change title of activity
         val actionBar = supportActionBar
         actionBar!!.title = resources.getString(R.string.app_name)
+
+        ReleaseLogHandler.ShowReleaseLogWhenNewVersion(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
