@@ -2,12 +2,13 @@ package com.Sanleone.progress
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.RadioButton
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.Sanleone.progress.arguments.Arguments
 import com.Sanleone.progress.dataHandler.CheckType
@@ -335,15 +336,40 @@ class FragmentTaskDetailsAndProperties : Fragment() {
 
         GetMenuItemById(menu, R.id.action_delete)?.setOnMenuItemClickListener {
             println("onOptionsItemSelected")
+//            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
-            val progressList = ProgressLoader.LoadProgess(context!!)
+            val confirmDialog = (activity as MainActivity).confirmDialog
+            var title = task.shortDescription
+            if (title.length > 10){
+                title = title.substring(0, 7) + "..."
+            }
 
-            progressList[progressIndex].tasks.removeAt(taskIndex)
+            confirmDialog.setTitle(getString(R.string.deleteDialogTitle) + " " + title)
+                .setMessage(getString(R.string.deleteTaskDialogMessage))
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.delete)){dialogInterfact, it ->
+                    val progressList = ProgressLoader.LoadProgess(context!!)
 
-            ProgressLoader.SaveProgress(progressList, context!!)
+                    progressList[progressIndex].tasks.removeAt(taskIndex)
 
-            findNavController().popBackStack()
-            SetTitle(progress.name)
+                    ProgressLoader.SaveProgress(progressList, context!!)
+
+                    findNavController().popBackStack()
+                    SetTitle(progress.name)
+                }
+                .setNegativeButton(getString(R.string.cancel)){dialogInterfact, it->
+                    dialogInterfact.cancel()
+                }
+                .show()
+
+//            val progressList = ProgressLoader.LoadProgess(context!!)
+//
+//            progressList[progressIndex].tasks.removeAt(taskIndex)
+//
+//            ProgressLoader.SaveProgress(progressList, context!!)
+//
+//            findNavController().popBackStack()
+//            SetTitle(progress.name)
             true
         }
 

@@ -237,14 +237,31 @@ class FragmentProgressTaskView : Fragment() {
         GetMenuItemById(menu,R.id.action_delete)?.setOnMenuItemClickListener {
             println("onOptionsItemSelected")
 
-            val progressList = ProgressLoader.LoadProgess(context!!)
+            val confirmDialog = (activity as MainActivity).confirmDialog
+            var title = progress.name
+            if (title.length > 10){
+                title = title.substring(0, 7) + "..."
+            }
 
-            progressList.removeAt(progressIndex)
+            confirmDialog.setTitle(getString(R.string.deleteDialogTitle) + " " + title)
+                .setMessage(getString(R.string.deleteProgressDialogMessage))
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.delete)){dialogInterfact, it ->
+                    val progressList = ProgressLoader.LoadProgess(context!!)
 
-            ProgressLoader.SaveProgress(progressList,context!!)
+                    progressList.removeAt(progressIndex)
 
-            findNavController().popBackStack()
-            SetTitle(getString(R.string.app_name))
+                    ProgressLoader.SaveProgress(progressList,context!!)
+
+                    findNavController().popBackStack()
+                    SetTitle(getString(R.string.app_name))
+                }
+                .setNegativeButton(getString(R.string.cancel)){dialogInterfact, it->
+                    dialogInterfact.cancel()
+                }
+                .show()
+
+
             true
         }
 

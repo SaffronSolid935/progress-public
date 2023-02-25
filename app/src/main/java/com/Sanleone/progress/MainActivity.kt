@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import com.google.gson.Gson
 import java.io.File
 import androidx.navigation.findNavController
@@ -17,8 +18,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    lateinit var confirmDialog: AlertDialog.Builder
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        confirmDialog = AlertDialog.Builder(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
