@@ -12,10 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.Sanleone.progress.arguments.Arguments
 import com.Sanleone.progress.dataHandler.CheckType
+import com.Sanleone.progress.dataHandler.IDGenerator
 import com.Sanleone.progress.dataHandler.Progress
 import com.Sanleone.progress.dataHandler.ProgressLoader
 import com.Sanleone.progress.databinding.FragmentProgressTaskViewBinding
 import com.Sanleone.progress.listviewAdapter.TaskAdapter
+import com.Sanleone.progress.menuHandler.MenuHandler
 import com.google.gson.GsonBuilder
 
 /**
@@ -72,14 +74,19 @@ class FragmentProgressTaskView : Fragment() {
 
                     //id wird berechnet
 
-                    var newId = 0
+                    var newId = IDGenerator.GenerateStringID(32)
 
-                    progressList.forEach {
-                        if (it.id >= newId){
-                            newId = it.id + 1
+                    var isUnique = false
+
+                    while (!isUnique){
+                        isUnique = true
+                        progressList.forEach {
+                            if (it.id == newId){
+                                isUnique = false
+                                newId = IDGenerator.GenerateStringID(32)
+                            }
                         }
                     }
-
                     // progress wird erstellt und gespeichert
                     progress = Progress(newId,progressNameInput.text.toString(), mutableListOf())
                     progressList.add(progress)
@@ -90,11 +97,11 @@ class FragmentProgressTaskView : Fragment() {
 
                 }
                 "open"->{
-                    val id: Int = argumentParts[1].toInt()
+                    val id: String = argumentParts[1]
 
                     val progressList = ProgressLoader.LoadProgess(context!!)
                     for (i in 0 until progressList.size){
-                        if (progressList[i] .id == id){
+                        if (progressList[i].id == id){
                             progress = progressList[i]
                             println("Open: " + progress.name)
                             progressIndex = i
@@ -234,6 +241,7 @@ class FragmentProgressTaskView : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         println("onOptionsCreated")
         inflater.inflate(R.menu.menu_main, menu)
+        MenuHandler.ShowElementsInMenu(menu, mutableListOf(R.id.action_delete,R.id.action_copy))
         GetMenuItemById(menu,R.id.action_delete)?.setOnMenuItemClickListener {
             println("onOptionsItemSelected")
 

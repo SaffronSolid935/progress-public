@@ -12,6 +12,10 @@ object ProgressLoader{
 
     val progressFile = "progress.json"
 
+    fun LoadProgressFile(context: Context):String{
+        return Files.Read(progressFile,context)!!
+    }
+
     fun LoadProgess(context: Context):MutableList<Progress>{
         val fileContent = Files.Read(progressFile,context)
         val progress: MutableList<Progress>
@@ -33,10 +37,28 @@ object ProgressLoader{
         Files.Save(progressFile, gson.toJson(progress), context)
     }
 
+
+}
+
+object IDGenerator{
+    fun GenerateStringID(length: Int):String{
+        val letters = "qwertzuiopasdfghjklyxcvbnm"
+        val numbers = "1234567890"
+        val specialChars = "$%&-"
+        val chars = letters + letters.uppercase() + numbers + specialChars
+        var id = ""
+
+        for (i in 0 until length){
+            val randomIndex = (0 until chars.length).random()
+            id += chars[randomIndex]
+        }
+
+        return id
+    }
 }
 
 data class Progress(
-    var id: Int,
+    var id: String,
     var name: String,
     var tasks: MutableList<Task>
 ){
@@ -217,20 +239,25 @@ data class Progress(
         this.tasks.forEach {
             tasks.add(it.Copy())
         }
-        var newId = 0
+        var newId = IDGenerator.GenerateStringID(32)
 
         val progressList = ProgressLoader.LoadProgess(context!!)
 
-        progressList.forEach {
-            if (it.id >= newId){
-                newId = it.id + 1
+        var isUnique = false
+
+        while (!isUnique){
+            isUnique = true
+            progressList.forEach {
+                if (it.id == newId){
+                    isUnique = false
+                    newId = IDGenerator.GenerateStringID(32)
+                }
             }
         }
 
         val newProgress = Progress(newId,name,tasks)
         return newProgress
     }
-
 }
 
 sealed class TaskValue{

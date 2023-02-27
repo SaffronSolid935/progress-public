@@ -1,10 +1,16 @@
 package com.Sanleone.progress
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import java.io.File
 import androidx.navigation.findNavController
@@ -18,6 +24,9 @@ import com.Sanleone.progress.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var permissionLauncher: ActivityResultLauncher<String>
+    private var isReadPermissionGranted = false
 
     lateinit var confirmDialog: AlertDialog.Builder
 
@@ -68,5 +77,17 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+//    fun requestPermission(){
+//        isReadPermissionGranted = ContextCompat.checkSelfPermission(
+//            this,
+//            Manifest.permission.
+//        )
+//    }
+
+    companion object {
+        const val EXPORT_FILE_REQUEST_CODE = 65421198
+        const val IMPORT_FILE_REQUEST_CODE = 65421191
     }
 }

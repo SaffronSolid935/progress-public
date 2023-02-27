@@ -10,4 +10,16 @@
         android:id="@+id/action_delete"
         android:title="Delete"
         android:actionLayout="@layout/template_delete_button"/>
+    <item
+        android:id="@+id/action_open_settings"
+        android:title="Settings"
+        android:actionLayout="@layout/template_delete_button"/>
+    <item
+        android:id="@+id/action_import"
+        android:title="Import"
+        android:actionLayout="@layout/template_delete_button"/>
+    <item
+        android:id="@+id/action_export"
+        android:title="Export"
+        android:actionLayout="@layout/template_delete_button"/>
 </menu>

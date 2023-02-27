@@ -16,6 +16,7 @@ import com.Sanleone.progress.dataHandler.Progress
 import com.Sanleone.progress.dataHandler.ProgressLoader
 import com.Sanleone.progress.dataHandler.Task
 import com.Sanleone.progress.databinding.FragmentTaskDetailsAndPropertiesBinding
+import com.Sanleone.progress.menuHandler.MenuHandler
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -332,6 +333,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         println("onOptionsCreated")
         inflater.inflate(R.menu.menu_main, menu)
+        MenuHandler.ShowElementsInMenu(menu, mutableListOf(R.id.action_delete,R.id.action_copy))
         val copyItem = GetMenuItemById(menu, R.id.action_copy)
 
         GetMenuItemById(menu, R.id.action_delete)?.setOnMenuItemClickListener {
