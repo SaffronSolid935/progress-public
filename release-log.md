@@ -1,5 +1,7 @@
 # Release Log
 
+- **V 1.3.0**
+	- Import and export feature added
 - **V 1.2.2**
 	- Release log feature added.
 
