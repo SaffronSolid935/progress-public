@@ -36,6 +36,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
     var valueChanged: Boolean = false
     var goalChanged: Boolean = false
     var deleteNameOnEdit: Boolean = false
+    var checkTypeChanged: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,15 +91,20 @@ class FragmentTaskDetailsAndProperties : Fragment() {
 
         binding.taskNameView.addTextChangedListener {
             println("DefaultTaskName use: " + (binding.taskNameView.text.toString() == getString(R.string.defaultTaskName).substring(0, getString(R.string.defaultTaskName).length - 1)))
-            if (deleteNameOnEdit/*binding.taskNameView.text.toString() == getString(R.string.defaultTaskName).substring(0, getString(R.string.defaultTaskName).length - 1)*/){
-                deleteNameOnEdit = false
-                binding.taskNameView.setText("")
-                SetTitle("")
+            if (!checkTypeChanged) {
+                if (deleteNameOnEdit/*binding.taskNameView.text.toString() == getString(R.string.defaultTaskName).substring(0, getString(R.string.defaultTaskName).length - 1)*/) {
+                    deleteNameOnEdit = false
+                    binding.taskNameView.setText("")
+                    SetTitle("")
+                }
+                task.shortDescription = it.toString()
+                SetTitle(task.shortDescription)
+                //UpdateView()
+                SaveTask()
             }
-            task.shortDescription = it.toString()
-            SetTitle(task.shortDescription)
-            //UpdateView()
-            SaveTask()
+            else{
+                checkTypeChanged = false
+            }
         }
 
         binding.descriptionView.addTextChangedListener {
@@ -112,6 +118,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
 
         binding.typeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                checkTypeChanged = true
                 val selectedType = parent?.getItemAtPosition(position) as String
                 var change: Boolean = false
                 println("Selected Type: " + selectedType + ":" + position)
@@ -458,6 +465,7 @@ class FragmentTaskDetailsAndProperties : Fragment() {
         }
         Arguments.Clear()
         Arguments.AddArgument("open " + progressIndex.toString() + " " + taskIndex.toString())
+        Arguments.AddArgument("from properties")
     }
 
     override fun onDestroyView() {

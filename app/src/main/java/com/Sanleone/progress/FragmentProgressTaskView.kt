@@ -34,6 +34,9 @@ class FragmentProgressTaskView : Fragment() {
     lateinit var progress: Progress
     var progressIndex: Int = 0
     var deleteNameOnEdit: Boolean = false
+    var doNotDeleteNameCount: Int = 0
+
+    var doNotSaveProgressName:Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +53,10 @@ class FragmentProgressTaskView : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Awake()
+    }
+
+    fun Awake(){
 
         val progressNameInput = binding.progressNameInput
         val progressTextState = binding.progressTextState
@@ -63,8 +70,11 @@ class FragmentProgressTaskView : Fragment() {
 
             when (argumentParts[0]){
                 "create"->{
-
+                    println("Create Progress")
                     progressNameInput.setText(getString(R.string.defaultProgressName))
+                    progressNameInput.post {
+                        deleteNameOnEdit = true
+                    }
                     progressTextState.setText("0%")
                     progressBarView.progress = 0
 //                    progressBarView.max = 100
@@ -93,10 +103,11 @@ class FragmentProgressTaskView : Fragment() {
                     progressIndex = progressList.size - 1
 
                     ProgressLoader.SaveProgress(progressList,context!!)
-                    deleteNameOnEdit = true
+//                    deleteNameOnEdit = true
 
                 }
                 "open"->{
+                    println("Open Progress")
                     val id: String = argumentParts[1]
 
                     val progressList = ProgressLoader.LoadProgess(context!!)
@@ -113,6 +124,13 @@ class FragmentProgressTaskView : Fragment() {
                         }
                     }
                     deleteNameOnEdit = false
+                }
+                "from"->{
+                    when (argumentParts[1]){
+                        "properties"->{
+                            doNotSaveProgressName = true
+                        }
+                    }
                 }
             }
 //            if (argumentParts.size == 1){
@@ -153,11 +171,24 @@ class FragmentProgressTaskView : Fragment() {
 
         progressNameInput.addTextChangedListener {
             //println("Delete Name: " + deleteNameOnEdit)
-            if (deleteNameOnEdit){//.text.toString() == getString(R.string.defaultProgressName).substring(0, getString(R.string.defaultProgressName).length - 1)){
-                deleteNameOnEdit = false
-                progressNameInput.setText("")
+//            val stackTrace = Thread.currentThread().stackTrace
+//            if (stackTrace.size >= 2) {
+//                for (i in 0 until stackTrace.size) {
+//                    val caller = stackTrace[i]
+//                    println("myMethod() wurde von ${caller.className}.${caller.methodName} aufgerufen.")
+//                }
+//            }
+            println("PGName: " + it.toString() + ":" + (!doNotSaveProgressName) + ":" + deleteNameOnEdit)
+            if (!doNotSaveProgressName ) {
+                if (deleteNameOnEdit) {//.text.toString() == getString(R.string.defaultProgressName).substring(0, getString(R.string.defaultProgressName).length - 1)){
+                    deleteNameOnEdit = false
+                    progressNameInput.setText("")
+                }
+                UpdateProgressName()
             }
-            UpdateProgressName()
+            else{
+                doNotSaveProgressName = false
+            }
         }
 
         binding.addTaskButton.setOnClickListener {
@@ -353,6 +384,7 @@ class FragmentProgressTaskView : Fragment() {
         super.onResume()
         // Fortschrittsbalken aktualisieren
         binding.progressBarView.progress = progress.GetProgressInt()
+        Awake()
     }
 
     override fun onDestroyView() {

@@ -33,7 +33,15 @@ object ProgressLoader{
     }
 
     fun SaveProgress(progress: MutableList<Progress>, context: Context){
+//        val stackTrace = Thread.currentThread().stackTrace
+//        if (stackTrace.size >= 2) {
+//            for (i in 0 until stackTrace.size) {
+//                val caller = stackTrace[i]
+//                println("myMethod() wurde von ${caller.className}.${caller.methodName} aufgerufen.")
+//            }
+//        }
         val gson = Gson()
+//        println("Save JSON: " + gson.toJson(progress))
         Files.Save(progressFile, gson.toJson(progress), context)
     }
 
