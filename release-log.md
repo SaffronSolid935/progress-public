@@ -1,5 +1,8 @@
 # Release Log
 
+- **V 1.3.1**
+	- In version 1.3.0, it was not possible to properly save a task.
+	- Hot fixes: The name of the task disappeared when you changed the checkType of the task.
 - **V 1.3.0**
 	- Import and export feature added
 - **V 1.2.2**
